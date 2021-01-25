@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterEcommerceProject/providers/cart.dart';
 import 'package:flutterEcommerceProject/providers/products.dart';
 import 'package:flutterEcommerceProject/screens/product_details_screen.dart';
 import 'package:flutterEcommerceProject/screens/product_overview_screen.dart';
@@ -12,9 +13,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (cntx)=>Products(),
-          child: MaterialApp(
+    return MultiProvider(providers:
+      [
+        ChangeNotifierProvider(
+            create: (cntx)=>Products(),),
+        ChangeNotifierProvider(
+            create: (cntx)=>Cart(),),
+      ],
+        child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
           // This is the theme of your application.

@@ -3,12 +3,14 @@ import 'package:flutterEcommerceProject/providers/products.dart';
 import 'package:flutterEcommerceProject/widgets/product_item.dart';
 import 'package:provider/provider.dart';
 class ProductsGrid extends StatelessWidget {
-  
+  final bool isFavorite;
+
+  const ProductsGrid( this.isFavorite) ;
 
   @override
   Widget build(BuildContext context) {
     final productData = Provider.of<Products>(context);
-    final products = productData.items;
+    final products = isFavorite?productData.favoriteItems: productData.items;
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 2,
