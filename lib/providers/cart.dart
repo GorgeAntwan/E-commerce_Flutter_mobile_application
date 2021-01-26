@@ -14,12 +14,25 @@ class CartItems {
 }
 
 class Cart with ChangeNotifier {
-  Map<String, CartItems> _items;
+  Map<String, CartItems> _items ={};
 
   Map<String, CartItems> get items {
     return {..._items};
   }
-
+  int get countItems{
+    return _items.length;
+  }
+  double get totalAmount{
+    var total=0.0;
+    _items.forEach((key, cartItem) {
+      total += cartItem.price * cartItem.quantity;
+     });
+    return total;
+  }
+  void removeItem(String productId){
+         _items.remove(productId);
+         notifyListeners();
+  }
   void addItem(String productId, double price, String title) {
     if (_items.containsKey(productId)) {
       //if the item is already in the cart update the item in the cart
@@ -42,5 +55,6 @@ class Cart with ChangeNotifier {
               quantity: 1,
               price: price));
     }
+    notifyListeners();
   }
 }

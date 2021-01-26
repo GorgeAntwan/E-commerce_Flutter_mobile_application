@@ -14,7 +14,18 @@ class ProductDetailsScreen extends StatelessWidget {
     return Container(
       child: Scaffold(appBar: AppBar(
         title: Text(product.title)
-      ),),
+      ),
+       body: SingleChildScrollView(
+         child:Column(
+           children: [
+                Container(child:Image.network(product.imageUrl,fit: BoxFit.cover,width: double.infinity,height: 300,),),
+                Container(padding: EdgeInsets.all(10),child:Text('\$${product.price}',style: TextStyle(fontSize: 20,color: Colors.grey),))  ,
+                Container(padding: EdgeInsets.all(10),child:Text('${product.title}',style: TextStyle(fontSize: 18,))  ),
+
+           ],
+         )
+       ),
+      ),
     );
   }
 }
