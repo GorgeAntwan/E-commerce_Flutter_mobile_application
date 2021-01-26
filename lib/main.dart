@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterEcommerceProject/providers/cart.dart';
 import 'package:flutterEcommerceProject/providers/products.dart';
+import 'package:flutterEcommerceProject/screens/cart_screen.dart';
 import 'package:flutterEcommerceProject/screens/product_details_screen.dart';
 import 'package:flutterEcommerceProject/screens/product_overview_screen.dart';
 import 'package:provider/provider.dart';
@@ -11,8 +12,10 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  
   @override
   Widget build(BuildContext context) {
+    
     return MultiProvider(providers:
       [
         ChangeNotifierProvider(
@@ -20,9 +23,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
             create: (cntx)=>Cart(),),
       ],
+      
         child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
+          
           // This is the theme of your application.
           //
           // Try running your application with "flutter run". You'll see the
@@ -39,10 +44,12 @@ class MyApp extends StatelessWidget {
           // the app on. For desktop platforms, the controls will be smaller and
           // closer together (more dense) than on mobile platforms.
           visualDensity: VisualDensity.adaptivePlatformDensity,
+          
         ),
         home: ProductOverviewScreen(),
         routes: {
           ProductDetailsScreen.routeName: (context)=>ProductDetailsScreen(),
+          CartScreen.routeName:(context) => CartScreen()
         },
       ),
     );
