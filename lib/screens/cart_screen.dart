@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterEcommerceProject/providers/cart.dart' show Cart;
+import 'package:flutterEcommerceProject/providers/order.dart';
+import 'package:flutterEcommerceProject/widgets/app_drawer.dart';
 import 'package:flutterEcommerceProject/widgets/cart_item.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +17,7 @@ class CartScreen extends StatelessWidget {
           'Your Cart',
         ),
       ),
+      drawer: AppDrawer(),
       body: Container(
         child: Column(
           children: [
@@ -40,9 +43,12 @@ class CartScreen extends StatelessWidget {
                         ),
                         label: Text(
                           // ignore: deprecated_member_use
-                          '\$${cart.totalAmount}',style: TextStyle(color: Theme.of(context).primaryTextTheme.title.color,),
+                          '\$${cart.totalAmount.toStringAsFixed(2)}',style: TextStyle(color: Theme.of(context).primaryTextTheme.title.color,),
                         )),
-                        FlatButton(onPressed: (){}, child: Text('ORDER NOW',style: TextStyle(color:Theme.of(context).primaryColor)))
+                        FlatButton(onPressed: (){
+                          Provider.of<Orders>(context,listen: false).addOrder(cart.items.values.toList(), cart.totalAmount);
+                          cart.clearItem();
+                        }, child: Text('ORDER NOW',style: TextStyle(color:Theme.of(context).primaryColor)))
                   ],
                 ),
               ),

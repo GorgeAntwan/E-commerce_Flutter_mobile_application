@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterEcommerceProject/providers/cart.dart';
 import 'package:flutterEcommerceProject/screens/cart_screen.dart';
+import 'package:flutterEcommerceProject/widgets/app_drawer.dart';
 import 'package:flutterEcommerceProject/widgets/badge.dart';
 import 'package:flutterEcommerceProject/widgets/products_grid.dart';
 import 'package:provider/provider.dart';
@@ -55,6 +56,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
             )
           ],
         ),
+        drawer: AppDrawer(),
         body: Container(
           padding: EdgeInsets.all(10),
           child: ProductsGrid(isFavorited),
