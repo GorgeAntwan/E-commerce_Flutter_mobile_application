@@ -3,6 +3,8 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterEcommerceProject/providers/product.dart';
+import 'package:flutterEcommerceProject/providers/products.dart';
+import 'package:provider/provider.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const routeName = '/edit-product';
@@ -33,6 +35,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
     super.dispose();
   }
   void _updateImageUrl(){
+      if(_imageUrlController.text.isEmpty ){
+       
+         return ;
+      }
+      if(!_imageUrlController.text.startsWith('http')&&!_imageUrlController.text.startsWith('https')){
+           
+           return ;
+      }
+      if(!_imageUrlController.text.endsWith('.jpg')&&!_imageUrlController.text.endsWith('.jpeg')&&!_imageUrlController.text.endsWith('.png')){
+        return ;
+      }
       if(!_imageUrlFocusNode.hasFocus){
         setState(() {
           
@@ -45,11 +58,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
        if(!isValid){
          return;
        }
-      print(edite_product.title);
-      print(edite_product.description);
-      print(edite_product.price);
-      print(edite_product.imageUrl);
-     
+      Provider.of<Products>(context,listen: false).addItem(edite_product);
 
   }
   @override
@@ -100,6 +109,16 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         isFavorite: edite_product.isFavorite
                       );
                     },
+                    validator:(value){
+                      if(value.isEmpty){
+                        return 'Please Enter Price.';
+                      }else if(double.tryParse(value)==null){
+                               return "Enter Valid Prcie.";
+                      }else if (double.parse(value)<=0){
+                        return 'price must br greater than Zero';
+                      }
+                      return null;
+                    }
                   ),
                    TextFormField(  
                     decoration: InputDecoration(labelText: 'Description',),
@@ -116,6 +135,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         isFavorite: edite_product.isFavorite
                       );
                     },
+                     validator:(value){
+                      if(value.isEmpty){
+                        return 'Please Enter Description.';
+                      }else if(value.length<=10){
+                               return "Description Must be greater than 10 characters.";
+                      } 
+                      return null;
+                    }
                   ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -152,6 +179,16 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                 isFavorite: edite_product.isFavorite
                               );
                             },
+                             validator:(value){
+                              if(value.isEmpty){
+                                return 'Please Enter Url.';
+                              }else if(!value.startsWith('http')&&!value.startsWith('https')){
+                                      return "Please Enter Valid Url.";
+                              }else if (!value.endsWith('.png')&&!value.endsWith('.jpg')&&!value.endsWith('.jpeg')){
+                               return "Please Enter Valid Url.";
+                              }
+                              return null;
+                            }
                         ),
                       ),
                     ],
