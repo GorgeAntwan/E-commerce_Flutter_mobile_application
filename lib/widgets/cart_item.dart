@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterEcommerceProject/providers/cart.dart';
 import 'package:provider/provider.dart';
 class CartItem extends StatelessWidget {
-  final String id;
+  final String id;  
   final String title;
   final int quantity;
   final double price;
@@ -30,10 +30,10 @@ class CartItem extends StatelessWidget {
              title: Text('Are You Sure?'),
              content: Text('Do You Want Remove Item From Cart? '),
              actions: [
-                FlatButton(onPressed: (){
+                TextButton(onPressed: (){
                   Navigator.of(cntx).pop(false);
                 }, child: Text('No')),
-                FlatButton(onPressed: (){
+                TextButton(onPressed: (){
                     Navigator.of(cntx).pop(true);
                 }, child: Text('Yes'))
              ],
@@ -43,7 +43,7 @@ class CartItem extends StatelessWidget {
            margin: EdgeInsets.symmetric(horizontal: 15,vertical: 4),
            child: Padding(
              padding: const EdgeInsets.all(8.0),
-             child: ListTile(
+              child: ListTile(
               leading :  FittedBox(fit: BoxFit.contain,child: CircleAvatar(child: Text('\$$price',style: TextStyle(fontSize: 10),),)),
             
                title: Text(title),

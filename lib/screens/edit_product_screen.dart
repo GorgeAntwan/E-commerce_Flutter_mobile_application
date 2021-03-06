@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterEcommerceProject/providers/product.dart';
@@ -27,6 +25,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
    'price':'',
    'imageUrl':'',
  };
+ var _isLoading = false;
  @override
   void initState() {
     _imageUrlFocusNode.addListener(_updateImageUrl);
@@ -38,18 +37,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
        final productId =  ModalRoute.of(context).settings.arguments as String;
        if(productId!=null){
           edite_product = Provider.of<Products>(context).findById(productId);
-       _intialValues = {
-           
-          'title': edite_product.title,
-          'description':edite_product.description,
-          'price':edite_product.price.toString(),
-          //'imageUrl':edite_product.imageUrl,
-          'imageUrl' :''
-        };
-        _imageUrlController.text = edite_product.imageUrl;
+          _intialValues = {
+              'title': edite_product.title,
+              'description':edite_product.description,
+              'price':edite_product.price.toString(),
+              //'imageUrl':edite_product.imageUrl,
+              'imageUrl' :''
+            };
+          _imageUrlController.text = edite_product.imageUrl;
        }
       }
-    // TODO: implement didChangeDependencies
+   
     super.didChangeDependencies();
   }
   @override
@@ -80,20 +78,55 @@ class _EditProductScreenState extends State<EditProductScreen> {
         });
       }
   }
- void _saveForm (){
+ Future<void> _saveForm () async{
   
        final isValid = _form.currentState.validate();
        if(!isValid){
          return;
        }
+       _form.currentState.save();
+       setState(() {
+         _isLoading =true;
+       });
       if(edite_product.id!=null){
-       
-            Provider.of<Products>(context,listen: false).updateItem(edite_product.id,edite_product);
+       print(edite_product.id);
+         print(edite_product.title);
+          print(edite_product.description);
+            await Provider.of<Products>(context,listen: false).updateItem(edite_product.id,edite_product);
+             setState(() {
+                _isLoading =false;
+             });
+             Navigator.of(context).pop();
       }else{  
-        Provider.of<Products>(context,listen: false).addItem(edite_product);
+         
+        
+
+        try {
+           await Provider.of<Products>(context,listen: false).addItem(edite_product);
+          
+           Navigator.of(context).pop();
+             
+        } catch (error) {
+            print("error:$error");
+           await  showDialog(context: context,
+            builder: (cntx)=>AlertDialog(
+              title: Text('An error occurred !'),
+              content: Text('SomeThing went wrong.'),
+              actions: [
+                TextButton(onPressed: (){
+                      Navigator.of(context).pop();  
+                }, child: Text('Okay'))
+              ],
+            )
+            );
+        }finally{
+           setState(() {
+                _isLoading =false;
+            });
+        }
 
       }
-      Navigator.of(context).pop();
+     
   }
   @override
   Widget build(BuildContext context) {
@@ -106,7 +139,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
             ],
           ),
           
-          body: Padding(
+          body: _isLoading? Center(child:CircularProgressIndicator()): Padding(
             padding: EdgeInsets.all(20),
             child: Form(
               key: _form,

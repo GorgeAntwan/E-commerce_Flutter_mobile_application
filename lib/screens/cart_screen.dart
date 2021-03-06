@@ -45,7 +45,7 @@ class CartScreen extends StatelessWidget {
                           // ignore: deprecated_member_use
                           '\$${cart.totalAmount.toStringAsFixed(2)}',style: TextStyle(color: Theme.of(context).primaryTextTheme.title.color,),
                         )),
-                        FlatButton(onPressed: (){
+                        TextButton(onPressed: (){
                           Provider.of<Orders>(context,listen: false).addOrder(cart.items.values.toList(), cart.totalAmount);
                           cart.clearItem();
                         }, child: Text('ORDER NOW',style: TextStyle(color:Theme.of(context).primaryColor)))

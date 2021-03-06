@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterEcommerceProject/providers/cart.dart';
+import 'package:flutterEcommerceProject/providers/products.dart';
 import 'package:flutterEcommerceProject/screens/cart_screen.dart';
 import 'package:flutterEcommerceProject/widgets/app_drawer.dart';
 import 'package:flutterEcommerceProject/widgets/badge.dart';
@@ -12,10 +13,28 @@ class ProductOverviewScreen extends StatefulWidget {
 }
 
 bool isFavorited = false;
+bool _isIntil =true;
+bool _isLoading = false;
 enum FilterOption { Favorited, All }
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
-   
+   @override
+  void didChangeDependencies() {
+    if(_isIntil){
+      setState(() {
+        _isLoading = true;
+      });  
+      Provider.of<Products>(context).fetchAndSetProduct().then((_){
+        setState(() {
+          _isLoading = false;
+        });  
+      }).catchError((error){
+        print(error);
+      });
+    }
+   _isIntil= false;
+    super.didChangeDependencies();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -57,7 +76,12 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
           ],
         ),
         drawer: AppDrawer(),
-        body: Container(
+        body: _isLoading ?Center(child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              
+                child: Container(width:100,height: 100,color:Colors.grey[200],child: Center(child: CircularProgressIndicator(strokeWidth: 3,)))),)
+          
+          :Container(
           padding: EdgeInsets.all(10),
           child: ProductsGrid(isFavorited),
         ),
