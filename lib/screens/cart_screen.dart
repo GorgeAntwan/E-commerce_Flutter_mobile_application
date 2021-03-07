@@ -25,31 +25,32 @@ class CartScreen extends StatelessWidget {
               margin: EdgeInsets.all(15),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // ignore: deprecated_member_use
-                    Text(
-                      'Total Price',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Spacer(),
-                    Chip(
-                        backgroundColor:Theme.of(context).primaryColor ,
-                        labelStyle: TextStyle(
-                          
-                          backgroundColor: Theme.of(context).primaryColor,
-                          
-                        ),
-                        label: Text(
-                          // ignore: deprecated_member_use
-                          '\$${cart.totalAmount.toStringAsFixed(2)}',style: TextStyle(color: Theme.of(context).primaryTextTheme.title.color,),
-                        )),
-                        TextButton(onPressed: (){
-                          Provider.of<Orders>(context,listen: false).addOrder(cart.items.values.toList(), cart.totalAmount);
-                          cart.clearItem();
-                        }, child: Text('ORDER NOW',style: TextStyle(color:Theme.of(context).primaryColor)))
-                  ],
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // ignore: deprecated_member_use
+                      Text(
+                        'Total Price',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      //Spacer(),
+                      SizedBox(height: 20,),
+                      Chip(
+                          backgroundColor:Theme.of(context).primaryColor ,
+                          labelStyle: TextStyle(
+                            
+                            backgroundColor: Theme.of(context).primaryColor,
+                            
+                          ),
+                          label: Text(
+                            // ignore: deprecated_member_use
+                            '\$${cart.totalAmount.toStringAsFixed(2)}',style: TextStyle(color: Theme.of(context).primaryTextTheme.title.color,),
+                          )),
+                          OrderButton(cart: cart)
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -71,5 +72,43 @@ class CartScreen extends StatelessWidget {
         ),
       ),
     ));
+  }
+}
+
+class OrderButton extends StatefulWidget {
+  
+  const OrderButton({
+    Key key,
+    @required this.cart,
+  }) : super(key: key);
+
+  final Cart cart;
+  
+  @override
+  _OrderButtonState createState() => _OrderButtonState();
+}
+ 
+class _OrderButtonState extends State<OrderButton> {
+  var _isLoading = false;
+  @override
+  Widget build(BuildContext context) {
+   
+    return TextButton(onPressed: (widget.cart.totalAmount<=0 || _isLoading ) ? 
+      
+      null: () async{
+
+      setState(() {
+        _isLoading = true;
+      });
+
+      await Provider.of<Orders>(context,listen: false).addOrder(widget.cart.items.values.toList(), widget.cart.totalAmount);
+
+      widget.cart.clearItem();
+
+      setState(() {
+        _isLoading = false;
+      });
+
+    }, child: _isLoading ? CircularProgressIndicator() : Text('ORDER NOW',style: TextStyle(color:Theme.of(context).primaryColor)));
   }
 }

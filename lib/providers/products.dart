@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutterEcommerceProject/models/http_exeption.dart';
 import 'package:flutterEcommerceProject/providers/product.dart';
@@ -64,6 +63,9 @@ class Products with ChangeNotifier {
       //print(json.decode(response.body));
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       final List<Product> loadedProducts = [];
+      if(extractedData ==null){
+        return ;
+      }
       extractedData.forEach((productId, productData) {
         loadedProducts.add(Product(
             id: productId,
