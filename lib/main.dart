@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutterEcommerceProject/providers/auth.dart';
 import 'package:flutterEcommerceProject/providers/cart.dart';
 import 'package:flutterEcommerceProject/providers/order.dart';
 import 'package:flutterEcommerceProject/providers/products.dart';
+import 'package:flutterEcommerceProject/screens/auth_screen.dart';
 import 'package:flutterEcommerceProject/screens/cart_screen.dart';
 import 'package:flutterEcommerceProject/screens/edit_product_screen.dart';
 import 'package:flutterEcommerceProject/screens/order_screen.dart';
 import 'package:flutterEcommerceProject/screens/product_details_screen.dart';
-import 'package:flutterEcommerceProject/screens/product_overview_screen.dart';
 import 'package:flutterEcommerceProject/screens/user_product_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +22,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     
     return MultiProvider(providers:
-      [
+      [ 
+        ChangeNotifierProvider(
+            create: (cntx)=>Auth(),
+        ),
         ChangeNotifierProvider(
             create: (cntx)=>Products(),),
         ChangeNotifierProvider(
@@ -51,7 +55,7 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
           
         ),
-        home: ProductOverviewScreen(),
+        home: AuthScreen(),
         routes: {
           ProductDetailsScreen.routeName: (context)=>ProductDetailsScreen(),
           CartScreen.routeName:(context) => CartScreen(),
