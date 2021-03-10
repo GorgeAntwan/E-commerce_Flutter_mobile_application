@@ -41,6 +41,9 @@ class Products with ChangeNotifier {
                 ),
        */
   ];
+ final String authToken  ,userId;
+
+  Products(this.authToken,this.userId,this._items);
 
   List<Product> get items {
     return [..._items];
@@ -56,9 +59,16 @@ class Products with ChangeNotifier {
 
   Future<void> fetchAndSetProduct() async {
     try {
+      var paramsFavorite = {'auth' :this.authToken};
+      var urlFavorite = Uri.https(
+              'flutter-e-commerce-cb3f8-default-rtdb.firebaseio.com',
+              'userFavorites/$userId.json',paramsFavorite);
+      final favoriteResponse = await http.get(urlFavorite);
+      final favoriteData = json.decode(favoriteResponse.body);
+      var params = {'auth':this.authToken};
       var url = Uri.https(
           'flutter-e-commerce-cb3f8-default-rtdb.firebaseio.com',
-          'products.json');
+          'products.json',params);
       final response = await http.get(url);
       //print(json.decode(response.body));
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -73,7 +83,7 @@ class Products with ChangeNotifier {
             price: productData['price'],
             description: productData['description'],
             imageUrl: productData['imageUrl'],
-            isFavorite: productData['isFavorite']));
+            isFavorite: favoriteData ==null ?false : favoriteData[productId] ?? null));
       });
       _items = loadedProducts;
       notifyListeners();
@@ -86,16 +96,17 @@ class Products with ChangeNotifier {
   Future<void> addItem(Product product) async {
     try {
       //var url = 'https://flutter-e-commerce-cb3f8-default-rtdb.firebaseio.com/products.json';
+       var params = {'auth':this.authToken};
       var url = Uri.https(
           'flutter-e-commerce-cb3f8-default-rtdb.firebaseio.com',
-          'products.json');
+          'products.json',params);
       final response = await http.post(url,
           body: json.encode({
             'title': product.title,
             'description': product.description,
             'imageUrl': product.imageUrl,
             'price': product.price,
-            'isFavorite': product.isFavorite,
+           // 'isFavorite': product.isFavorite,
           }));
       final newProduct = new Product(
         id: json.decode(response.body)['name'],
@@ -116,17 +127,17 @@ class Products with ChangeNotifier {
     final productIndex = _items.indexWhere((prod) => prod.id == id);
     if (productIndex >= 0) {
         try {
-          
+          var params = {'auth':this.authToken};
           var url = Uri.https(
               'flutter-e-commerce-cb3f8-default-rtdb.firebaseio.com',
-              'products/$id.json');
+              'products/$id.json',params);
           await http.patch(url,
               body: json.encode({
                 'title': product.title,
                 'description': product.description,
                 'imageUrl': product.imageUrl,
                 'price': product.price,
-                'isFavorite': product.isFavorite,
+               // 'isFavorite': product.isFavorite,
               }));
             _items[productIndex] = product;
             print(_items[productIndex].title);
@@ -142,10 +153,10 @@ class Products with ChangeNotifier {
   }
 
   Future<void> deleteItem(id) async{
-
+    var params = {'auth':this.authToken};
     var url = Uri.https(
               'flutter-e-commerce-cb3f8-default-rtdb.firebaseio.com',
-              'products/$id.json');
+              'products/$id.json',params);
     final existingProdutIndex = _items.indexWhere((product) => product.id == id);
     var existingProduct = _items[existingProdutIndex];
     _items.removeWhere((prod) => prod.id == id);
