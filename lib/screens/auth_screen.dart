@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -148,6 +149,9 @@ class _AuthCardState extends State<AuthCard> {
                  errorMessage ='Invalid Password';
           }
          _showErrorDialog(errorMessage);
+    }on SocketException catch (error) {
+       print('error internet connection : $error');
+        _showErrorDialog('Plase Check your internet connection');
     }
      catch (error) {
        var errorMessage = 'Could not Authenticate you. please try again later.';

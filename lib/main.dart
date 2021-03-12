@@ -3,6 +3,7 @@ import 'package:flutterEcommerceProject/providers/auth.dart';
 import 'package:flutterEcommerceProject/providers/cart.dart';
 import 'package:flutterEcommerceProject/providers/order.dart';
 import 'package:flutterEcommerceProject/providers/products.dart';
+import 'package:flutterEcommerceProject/screens/splash_screen.dart';
 import 'package:flutterEcommerceProject/screens/auth_screen.dart';
 import 'package:flutterEcommerceProject/screens/cart_screen.dart';
 import 'package:flutterEcommerceProject/screens/edit_product_screen.dart';
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
          // create: (context)=>,
           update: (ctx, auth, previousProducts) => Products(
                 auth.token,
-                   auth.userId,
+                auth.userId,
                 previousProducts == null ? [] : previousProducts.items,
               ),
         ),
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
           //create: '',
            update: (cntx ,auth ,previousOrders) =>Orders(
              auth.token,
-           
+             auth.userId,
              previousOrders ==null ?[]: previousOrders.orders
            )
         ),
@@ -75,7 +76,14 @@ class MyApp extends StatelessWidget {
             // closer together (more dense) than on mobile platforms.
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          home: auth.isAuth ? ProductOverviewScreen() : AuthScreen(),
+          home: auth.isAuth ? ProductOverviewScreen() :
+            FutureBuilder(
+              future: auth.tryAutoLogin(),
+             builder: (ctx,authResultSnapshot)=>
+               authResultSnapshot.connectionState == ConnectionState.waiting?
+              SplashScreen()
+              :AuthScreen()
+             ) ,
           routes: {
             ProductDetailsScreen.routeName: (context) => ProductDetailsScreen(),
             CartScreen.routeName: (context) => CartScreen(),

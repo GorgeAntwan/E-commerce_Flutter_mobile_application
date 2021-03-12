@@ -20,7 +20,8 @@ class OrderItem {
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
   final authToken ;
-  Orders(this.authToken,this._orders);
+  final userId ;
+  Orders(this.authToken,this.userId,this._orders);
   List<OrderItem> get orders {
     return [..._orders];
   }
@@ -32,14 +33,14 @@ class Orders with ChangeNotifier {
       
        var url = Uri.https(
           'flutter-e-commerce-cb3f8-default-rtdb.firebaseio.com',
-          'orders.json',params);
+          'orders/$userId.json',params);
        final response = await http.get(url);
        final extractedData = json.decode(response.body) as Map<String,dynamic>;
        List<OrderItem> loadedOrder =[];
        if(extractedData ==null){
          return;
        }
-         
+       print('extractedData:$extractedData');
        extractedData.forEach((orderId, orderData)=>{
           loadedOrder.add(OrderItem(
             id: orderId, 
@@ -72,7 +73,7 @@ class Orders with ChangeNotifier {
        
       var url = Uri.https(
           'flutter-e-commerce-cb3f8-default-rtdb.firebaseio.com',
-          'orders.json',params);
+          'orders/$userId.json',params);
        
       final response = await http.post(url,
           body: json.encode({

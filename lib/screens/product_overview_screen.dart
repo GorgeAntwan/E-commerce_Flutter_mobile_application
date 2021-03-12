@@ -18,6 +18,7 @@ bool _isLoading = false;
 enum FilterOption { Favorited, All }
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
+   
    @override
   void didChangeDependencies() {
     if(_isIntil){
