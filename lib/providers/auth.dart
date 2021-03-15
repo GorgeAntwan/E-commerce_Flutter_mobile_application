@@ -60,6 +60,7 @@ class Auth with ChangeNotifier {
         throw error;
      }
    }
+   // ignore: missing_return
    Future<bool> tryAutoLogin()async{
       final prefs = await SharedPreferences.getInstance();
       if(!prefs.containsKey('userData')){

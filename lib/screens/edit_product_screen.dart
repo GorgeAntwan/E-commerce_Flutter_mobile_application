@@ -16,6 +16,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _imageUrlController = TextEditingController();
  final _imageUrlFocusNode = FocusNode() ;
  final _form = GlobalKey<FormState>();
+ // ignore: non_constant_identifier_names
  Product edite_product= Product(id:null,title: '',description: '',price:0.0,imageUrl:'',isFavorite: false);
  var _isInit = true;
  var _intialValues = {
