@@ -105,7 +105,7 @@ class _AuthCardState extends State<AuthCard>  with SingleTickerProviderStateMixi
   };
   var _isLoading = false;
   final _passwordController = TextEditingController();
-   AnimationController _controller;
+  AnimationController _controller;
   Animation<Offset> _slideAnimation;
   Animation<double> _opacityAnimation;
 

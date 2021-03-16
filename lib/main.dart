@@ -13,6 +13,8 @@ import 'package:flutterEcommerceProject/screens/product_overview_screen.dart';
 import 'package:flutterEcommerceProject/screens/user_product_screen.dart';
 import 'package:provider/provider.dart';
 
+import 'helpers/custom_route.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -75,6 +77,12 @@ class MyApp extends StatelessWidget {
             // the app on. For desktop platforms, the controls will be smaller and
             // closer together (more dense) than on mobile platforms.
             visualDensity: VisualDensity.adaptivePlatformDensity,
+             pageTransitionsTheme: PageTransitionsTheme(
+                  builders: {
+                    TargetPlatform.android: CustomPageTransitionBuilder(),
+                    TargetPlatform.iOS: CustomPageTransitionBuilder(),
+                  },
+                ),
           ),
           home: auth.isAuth ? ProductOverviewScreen() :
             FutureBuilder(

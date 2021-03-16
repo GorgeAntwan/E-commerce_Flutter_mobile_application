@@ -36,28 +36,34 @@ class _OrderItemState extends State<OrderItem> {
                ).toList()
             );
     return Container(
-      child: Card(
-        margin: EdgeInsets.all(10),
-        child: Column(
-        children: [
-          ListTile(
-            title: Text('\$${widget.order.amount}'),
-            subtitle: Text(DateFormat('dd/mm/yyyy hh:mm').format(widget.order.dateTime)),
-            trailing: IconButton(icon: isExpanded? Icon(Icons.expand_more):Icon(Icons.expand_less),onPressed: (){
-              setState(() {
-                
-                this.isExpanded =!isExpanded;
-              });
-            },),
-          ),
-          if(isExpanded)
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 15,vertical:4),
-               height: min(widget.order.products.length*20.0+10, 100),
-              child:listView)
-          
-        ],
-      ), ),
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+          height: isExpanded ?min(widget.order.products.length*20.0+110, 200):95,
+          child: Card(
+          margin: EdgeInsets.all(10),
+          child: Column(
+          children: [
+            ListTile(
+              title: Text('\$${widget.order.amount}'),
+              subtitle: Text(DateFormat('dd/mm/yyyy hh:mm').format(widget.order.dateTime)),
+              trailing: IconButton(icon: isExpanded? Icon(Icons.expand_more):Icon(Icons.expand_less),onPressed: (){
+                setState(() {
+                  
+                  this.isExpanded =!isExpanded;
+                });
+              },),
+            ),
+           // if(isExpanded)
+              AnimatedContainer(
+                duration: Duration(milliseconds: 300),
+                height: isExpanded ? min(widget.order.products.length * 20.0 + 10, 100) : 0,
+                padding: EdgeInsets.symmetric(horizontal: 15,vertical:4),
+                  
+                child:listView)
+            
+          ],
+        ), ),
+      ),
     );
   }
 }
